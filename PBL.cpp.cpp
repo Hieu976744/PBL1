@@ -84,9 +84,9 @@ public:
         if (getline(fin, line)) //Nếu đọc được giá trị trong file thì chỉnh sửa, không thì giữ nguyên
          {
             int gia[8];
-            int i = 0;
             size_t vitri = 0, vitricu = 0;
-            while ((vitri = line.find('|', vitricu)) != string::npos) {
+            for(int i=0; i<=7; i++) {
+                vitri=line.find("|",vitricu);
                 gia[i] = stoi(line.substr(vitricu, vitri - vitricu));
                 vitricu = vitri + 1;
                 i++;
@@ -224,12 +224,11 @@ public:
         string line;
         if (getline(fin, line)) {
             float phuThu[4];
-            int i = 0;
             int vitri = 0, vitricu = 0;
-            while ((vitri = line.find('|', vitricu)) != string::npos) {
+            for(int i=0;i<=3;i++){
+                vitri=line.find("|",vitricu);
                 phuThu[i] = stof(line.substr(vitricu, vitri - vitricu));
                 vitricu = vitri + 1;
-                i++;
             }
             phu_thu_thoi_diem = phuThu[0];
             phu_thu_thoi_luong = phuThu[1];
