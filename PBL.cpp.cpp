@@ -39,6 +39,10 @@ private:
     float phu_thu_chu_nhat = 0.05;
 
 public:
+    DichVuChamSocCayCanh(){
+    docGiaDichVuTuFile();
+    docGiaPhuThuTuFile();
+    }
     void menuDichVu() {
         int choice;
         do {
@@ -80,16 +84,11 @@ public:
             cout << "LOI KHONG THE MO FILE! \n";
             return;
         }
-        string line;
-        if (getline(fin, line)) //Nếu đọc được giá trị trong file thì chỉnh sửa, không thì giữ nguyên
-         {
+            string dulieufile;
             int gia[8];
-            size_t vitri = 0, vitricu = 0;
             for(int i=0; i<=7; i++) {
-                vitri=line.find("|",vitricu);
-                gia[i] = stoi(line.substr(vitricu, vitri - vitricu));
-                vitricu = vitri + 1;
-                i++;
+                getline(fin, dulieufile,'|'); //đọc giá trị cho đến khi gặp dấu '|' thì dừng
+                gia[i]=stoi(dulieufile);// stoi chuyển từ kiểu chuỗi sang kiểu số nguyên int
             }
             gia_cham_soc_cay_don_le = gia[0];
             gia_tu_van_cay = gia[1];
@@ -99,7 +98,6 @@ public:
             gia_tu_van_vuon_base = gia[5];
             gia_tu_van_vuon_25_80 = gia[6];
             gia_tu_van_vuon_tren_80 = gia[7];
-        }
         fin.close();
     }
    void Hien_thi_gia_dich_vu() const {
@@ -221,20 +219,16 @@ public:
             cout << "LOI KHONG THE MO FILE! \n";
             return;
         }
-        string line;
-        if (getline(fin, line)) {
+            string dulieufile;
             float phuThu[4];
-            int vitri = 0, vitricu = 0;
             for(int i=0;i<=3;i++){
-                vitri=line.find("|",vitricu);
-                phuThu[i] = stof(line.substr(vitricu, vitri - vitricu));
-                vitricu = vitri + 1;
+                getline(fin, dulieufile, '|'); //đọc dữ liệu trong file cho đến khi gặp kí tự '|' thì dừng
+                phuThu[i]=stof(dulieufile); //stof chuyển từ kiểu chuỗi sang kiểu số thực float
             }
             phu_thu_thoi_diem = phuThu[0];
             phu_thu_thoi_luong = phuThu[1];
             phu_thu_khoang_cach = phuThu[2];
             phu_thu_chu_nhat = phuThu[3];
-        }
         fin.close();
     }
 
@@ -560,6 +554,7 @@ private:
 public:
     Quanlykhachhang() {
         SLkhachhang = 0;
+        docTuFile();
     }
 
     void themKhachHang() {
@@ -701,14 +696,14 @@ public:
             int stt = i + 1;
             cout << "| KHACH HANG THU " << stt << ":\n";
             cout << "|-------------------------------\n";
-            cout << "| CCCD        | " << CCCD[i] << "\n";
-            cout << "| Ho ten      | " << ten[i] << "\n";
-            cout << "| So dien thoai | " << sdt[i] << "\n";
-            cout << "| Dia chi     | " << diachi[i] << "\n";
-            cout << "| Dich vu     | " << yeucaudichvu[i] << "\n";
-            cout << "| Gia dich vu | " << giadichvu[i] << " dong\n";
-            cout << "| Gia phu thu | " << giaphuthu[i] << " dong\n";
-            cout << "| Tong so tien | " << (giadichvu[i] + giaphuthu[i]) << " dong\n";
+            cout << "| CCCD          " << CCCD[i] << "\n";
+            cout << "| Ho ten        " << ten[i] << "\n";
+            cout << "| So dien thoai " << sdt[i] << "\n";
+            cout << "| Dia chi       " << diachi[i] << "\n";
+            cout << "| Dich vu       " << yeucaudichvu[i] << "\n";
+            cout << "| Gia dich vu   " << giadichvu[i] << " dong\n";
+            cout << "| Gia phu thu   " << giaphuthu[i] << " dong\n";
+            cout << "| Tong so tien  " << (giadichvu[i] + giaphuthu[i]) << " dong\n";
             cout << "=====================================\n";
         }
     }
@@ -740,8 +735,8 @@ public:
             return;
         }
         for (int i = 0; i < SLkhachhang; i++) {
-            fout << CCCD[i] << "," << ten[i] << "," << sdt[i] << "," << diachi[i] << ","
-                << yeucaudichvu[i] << "," << giadichvu[i] << "," << giaphuthu[i] << endl;
+            fout << CCCD[i] << "|" << ten[i] << "|" << sdt[i] << "|" << diachi[i] << "|"
+                << yeucaudichvu[i] << "|" << giadichvu[i] << "|" << giaphuthu[i] << endl;
         }
         fout.close();
     }
@@ -756,13 +751,13 @@ public:
         string cccd, tenKH, sdtKH, diaChiKH, yeuCauDV;
         int giaDV, giaPT;
         while (SLkhachhang < 100) {
-            if (!getline(fin, cccd, ',')) break;
-            if (!getline(fin, tenKH, ',')) break;
-            if (!getline(fin, sdtKH, ',')) break;
-            if (!getline(fin, diaChiKH, ',')) break;
-            if (!getline(fin, yeuCauDV, ',')) break;
+            if (!getline(fin, cccd, '|')) break;
+            if (!getline(fin, tenKH, '|')) break;
+            if (!getline(fin, sdtKH, '|')) break;
+            if (!getline(fin, diaChiKH, '|')) break;
+            if (!getline(fin, yeuCauDV, '|')) break;
             fin >> giaDV;
-            fin.ignore(1); // Bỏ dấu ,
+            fin.ignore(1); // Bỏ dấu |
             fin >> giaPT;
             fin.ignore(); // Bỏ ký tự xuống dòng
 
@@ -815,8 +810,8 @@ void Intro() {
     cout << "\t|                                        Giao vien huong dan: Dao Duy Tuan                     |\n";
     cout << "\t|                                                                                              |\n";
     cout << "\t|                                                                                              |\n";
-    cout << "\t|         Sinh vien thuc hien:                                                                 |\n";
-    cout << "\t|                                                                                              |\n";
+    cout << "\t|         Sinh vien thuc hien:  Phan Van Minh Hieu                                             |\n";
+    cout << "\t|                               Nguyen Thi Ngoc Huyen                                          |\n";
     cout << "\t|                                                                                              |\n";
     cout << "\t|______________________________________________________________________________________________|\n";
 }
@@ -824,9 +819,6 @@ int main() {
     Intro();
     DichVuChamSocCayCanh dv1;
     Quanlykhachhang qlkh;
-    qlkh.docTuFile();
-    dv1.docGiaDichVuTuFile();
-    dv1.docGiaPhuThuTuFile();
     int choice;
     do {
         cout << "\n========================================\n";
